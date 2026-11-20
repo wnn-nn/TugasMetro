@@ -16,6 +16,13 @@ class _DaftarMenuViewState extends State<DaftarMenuView> {
   // Menghubungkan View dengan ViewModel
   final MenuViewModel viewModel = MenuViewModel();
 
+  String formatRupiah(int nominal) {
+    return nominal.toString().replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]}.',
+        );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -31,7 +38,17 @@ class _DaftarMenuViewState extends State<DaftarMenuView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Katalog Kafe (MVVM)')),
+      appBar: AppBar(
+        title: const Text(
+          'Katalog Menu',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.brown,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       // ListenableBuilder mendengarkan perubahan state dari ViewModel
       body: ListenableBuilder(
         listenable: viewModel,
@@ -46,8 +63,14 @@ class _DaftarMenuViewState extends State<DaftarMenuView> {
                 margin: const EdgeInsets.only(bottom: 12),
                 child: ListTile(
                   leading: const Icon(Icons.local_cafe, color: Colors.brown),
-                  title: Text(item.nama),
-                  subtitle: Text('Rp ${item.harga}'),
+                  title: Text(
+                    item.nama,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: Text(
+                    'Rp ${formatRupiah(item.harga)}',
+                    style: const TextStyle(color: Colors.brown),
+                  ),
                   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                   onTap: () {
                     Navigator.push(
